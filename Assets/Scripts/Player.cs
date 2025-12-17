@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _boostSpeed = 2.0f;
     [SerializeField]
-    private float _boostSpeedNumebr = 3.5f;
+    private float _boostSpeedNumber = 3.5f;
     [SerializeField]
     private GameObject _laserPrefab;
     [SerializeField]
@@ -33,7 +33,7 @@ public class Player : MonoBehaviour
     private AudioClip _audioShoot;
     [SerializeField]
     private AudioClip _audioExpolosion;
-    private AudioSource _audioSoruce;
+    private AudioSource _audioSource;
     [SerializeField]
     private int _score;
 
@@ -43,7 +43,7 @@ public class Player : MonoBehaviour
         transform.position = Vector3.zero;
         _spawnManager = GameObject.Find("Spawn_Manager").GetComponent<SpawnManager>();
         _uimanager = GameObject.Find("UI_Manager").GetComponent<UIManager>();
-        _audioSoruce = GetComponent<AudioSource>();
+        _audioSource = GetComponent<AudioSource>();
 
         if (_spawnManager == null)
         {
@@ -55,7 +55,7 @@ public class Player : MonoBehaviour
             Debug.LogError("The UI Manager is NULL.");
         }
 
-        if (_audioSoruce == null)
+        if (_audioSource == null)
         {
             Debug.LogError("The Audio Source Component is NULL.");
         }
@@ -113,8 +113,8 @@ public class Player : MonoBehaviour
             Instantiate(_laserPrefab, transform.position + new Vector3(0, _laserOffset, 0), Quaternion.identity);
         }
 
-        _audioSoruce.clip = _audioShoot;
-        _audioSoruce.Play();
+        _audioSource.clip = _audioShoot;
+        _audioSource.Play();
     }
 
     public void Damage()
@@ -137,21 +137,21 @@ public class Player : MonoBehaviour
             _damageFire[1].SetActive(true);
         }
 
-        _uimanager.UpdateLeives(_lives);
+        _uimanager.UpdateLives(_lives);
 
         if (_lives < 1)
         {
             _spawnManager.OnPlayerDeath();
             _uimanager.TurnGameOverScreen();
-            _audioSoruce.clip = _audioExpolosion;
-            _audioSoruce.Play();
+            _audioSource.clip = _audioExpolosion;
+            _audioSource.Play();
             Destroy(this.gameObject);
         }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Enemy_Laser")
+        if (other.CompareTag("Enemy_Laser"))
         {
             Damage();
         }
@@ -177,11 +177,11 @@ public class Player : MonoBehaviour
 
     public void SpeedBoostActive()
     {
-        _speed += _boostSpeedNumebr;
-        StartCoroutine(SppedBoostCoolDown());
+        _speed += _boostSpeedNumber;
+        StartCoroutine(SpeedBoostCoolDown());
     }
 
-    IEnumerator SppedBoostCoolDown()
+    IEnumerator SpeedBoostCoolDown()
     {
         yield return new WaitForSeconds(5.0f);
         _speed = 5.0f;

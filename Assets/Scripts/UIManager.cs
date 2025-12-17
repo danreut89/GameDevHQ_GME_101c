@@ -28,7 +28,7 @@ public class UIManager : MonoBehaviour
         _text.text = "Score: " + points;
     }
 
-    public void UpdateLeives(int currentLives)
+    public void UpdateLives(int currentLives)
     {
         if (currentLives > 0 && currentLives < _livesSprites.Length)
         { 
